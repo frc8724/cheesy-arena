@@ -18,6 +18,11 @@ var toggleBypass = function(station) {
   websocket.send("toggleBypass", station);
 };
 
+// Sends a websocket message to bypass all alliance stations.
+var bypassAll = function(station) {
+  websocket.send("bypassAll", station);
+};
+
 // Sends a websocket message to start the match.
 var startMatch = function() {
   websocket.send("startMatch",

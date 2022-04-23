@@ -7,7 +7,6 @@ package web
 
 import (
 	"fmt"
-	"github.com/Team254/cheesy-arena/model"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -15,6 +14,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Team254/cheesy-arena/model"
 )
 
 // Shows the event settings editing page.
@@ -75,13 +76,9 @@ func (web *Web) settingsPostHandler(w http.ResponseWriter, r *http.Request) {
 	eventSettings.PauseDurationSec, _ = strconv.Atoi(r.PostFormValue("pauseDurationSec"))
 	eventSettings.TeleopDurationSec, _ = strconv.Atoi(r.PostFormValue("teleopDurationSec"))
 	eventSettings.WarningRemainingDurationSec, _ = strconv.Atoi(r.PostFormValue("warningRemainingDurationSec"))
-	eventSettings.QuintetThreshold, _ = strconv.Atoi(r.PostFormValue("quintetThreshold"))
-	eventSettings.CargoBonusRankingPointThresholdWithoutQuintet, _ =
-		strconv.Atoi(r.PostFormValue("cargoBonusRankingPointThresholdWithoutQuintet"))
-	eventSettings.CargoBonusRankingPointThresholdWithQuintet, _ =
-		strconv.Atoi(r.PostFormValue("cargoBonusRankingPointThresholdWithQuintet"))
-	eventSettings.HangarBonusRankingPointThreshold, _ =
-		strconv.Atoi(r.PostFormValue("hangarBonusRankingPointThreshold"))
+	eventSettings.BonusThreshold, _ = strconv.Atoi(r.PostFormValue("bonusThreshold"))
+	eventSettings.Bonus, _ = strconv.Atoi(r.PostFormValue("bonus"))
+	eventSettings.EruptionInterval, _ = strconv.Atoi(r.PostFormValue("eruptionInterval"))
 
 	if eventSettings.Ap2TeamChannel != 0 && eventSettings.Ap2TeamChannel == eventSettings.ApTeamChannel {
 		web.renderSettings(w, r, "Cannot use same channel for both access points.")

@@ -7,15 +7,16 @@ package web
 
 import (
 	"fmt"
-	"github.com/Team254/cheesy-arena/field"
-	"github.com/Team254/cheesy-arena/model"
-	"github.com/Team254/cheesy-arena/websocket"
-	"github.com/gorilla/mux"
 	"io"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/Team254/cheesy-arena/field"
+	"github.com/Team254/cheesy-arena/model"
+	"github.com/Team254/cheesy-arena/websocket"
+	"github.com/gorilla/mux"
 )
 
 // Renders the scoring interface which enables input of scores in real-time.
@@ -106,40 +107,16 @@ func (web *Web) scoringPanelWebsocketHandler(w http.ResponseWriter, r *http.Requ
 			}
 			web.arena.ScoringPanelRegistry.SetScoreCommitted(alliance, ws)
 			web.arena.ScoringStatusNotifier.Notify()
-		} else if number, err := strconv.Atoi(command); err == nil && number >= 1 && number <= 6 {
-			// Handle per-robot scoring fields.
-			if number <= 3 {
-				index := number - 1
-				score.TaxiStatuses[index] = !score.TaxiStatuses[index]
-				scoreChanged = true
-			} else {
-				index := number - 4
-				score.EndgameStatuses[index]++
-				if score.EndgameStatuses[index] == 5 {
-					score.EndgameStatuses[index] = 0
-				}
-				scoreChanged = true
-			}
+		} else if number, err := strconv.Atoi(command); err == nil && number >= 1 && number <= 3 {
+			score.Climbs[number-1] = !score.Climbs[number-1]
+			scoreChanged = true
 		} else if !web.arena.Plc.IsEnabled() {
 			switch strings.ToUpper(command) {
 			case "Q":
-				scoreChanged = decrementGoal(score.AutoCargoUpper[:])
-			case "A":
-				scoreChanged = decrementGoal(score.AutoCargoLower[:])
+				scoreChanged = decrementGoal(&score.LavaCount)
 			case "W":
-				scoreChanged = incrementGoal(score.AutoCargoUpper[:])
-			case "S":
-				scoreChanged = incrementGoal(score.AutoCargoLower[:])
-			case "E":
-				scoreChanged = decrementGoal(score.TeleopCargoUpper[:])
-			case "D":
-				scoreChanged = decrementGoal(score.TeleopCargoLower[:])
-			case "R":
-				scoreChanged = incrementGoal(score.TeleopCargoUpper[:])
-			case "F":
-				scoreChanged = incrementGoal(score.TeleopCargoLower[:])
+				scoreChanged = incrementGoal(&score.LavaCount)
 			}
-
 		}
 
 		if scoreChanged {
@@ -148,18 +125,16 @@ func (web *Web) scoringPanelWebsocketHandler(w http.ResponseWriter, r *http.Requ
 	}
 }
 
-// Increments the cargo count for the given goal.
-func incrementGoal(goal []int) bool {
-	// Use just the first hub quadrant for manual scoring.
-	goal[0]++
+// Increments the lava count
+func incrementGoal(goal *int) bool {
+	*goal++
 	return true
 }
 
-// Decrements the cargo for the given goal.
-func decrementGoal(goal []int) bool {
-	// Use just the first hub quadrant for manual scoring.
-	if goal[0] > 0 {
-		goal[0]--
+// Decrements the lava count
+func decrementGoal(goal *int) bool {
+	if *goal > 0 {
+		*goal--
 		return true
 	}
 	return false

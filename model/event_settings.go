@@ -8,40 +8,39 @@ package model
 import "github.com/Team254/cheesy-arena/game"
 
 type EventSettings struct {
-	Id                                            int `db:"id"`
-	Name                                          string
-	NumElimAlliances                              int
-	SelectionRound2Order                          string
-	SelectionRound3Order                          string
-	TBADownloadEnabled                            bool
-	TbaPublishingEnabled                          bool
-	TbaEventCode                                  string
-	TbaSecretId                                   string
-	TbaSecret                                     string
-	NetworkSecurityEnabled                        bool
-	ApAddress                                     string
-	ApUsername                                    string
-	ApPassword                                    string
-	ApTeamChannel                                 int
-	ApAdminChannel                                int
-	ApAdminWpaKey                                 string
-	Ap2Address                                    string
-	Ap2Username                                   string
-	Ap2Password                                   string
-	Ap2TeamChannel                                int
-	SwitchAddress                                 string
-	SwitchPassword                                string
-	PlcAddress                                    string
-	AdminPassword                                 string
-	WarmupDurationSec                             int
-	AutoDurationSec                               int
-	PauseDurationSec                              int
-	TeleopDurationSec                             int
-	WarningRemainingDurationSec                   int
-	QuintetThreshold                              int
-	CargoBonusRankingPointThresholdWithoutQuintet int
-	CargoBonusRankingPointThresholdWithQuintet    int
-	HangarBonusRankingPointThreshold              int
+	Id                          int `db:"id"`
+	Name                        string
+	NumElimAlliances            int
+	SelectionRound2Order        string
+	SelectionRound3Order        string
+	TBADownloadEnabled          bool
+	TbaPublishingEnabled        bool
+	TbaEventCode                string
+	TbaSecretId                 string
+	TbaSecret                   string
+	NetworkSecurityEnabled      bool
+	ApAddress                   string
+	ApUsername                  string
+	ApPassword                  string
+	ApTeamChannel               int
+	ApAdminChannel              int
+	ApAdminWpaKey               string
+	Ap2Address                  string
+	Ap2Username                 string
+	Ap2Password                 string
+	Ap2TeamChannel              int
+	SwitchAddress               string
+	SwitchPassword              string
+	PlcAddress                  string
+	AdminPassword               string
+	WarmupDurationSec           int
+	AutoDurationSec             int
+	PauseDurationSec            int
+	TeleopDurationSec           int
+	WarningRemainingDurationSec int
+	BonusThreshold              int
+	Bonus                       int
+	EruptionInterval            int
 }
 
 func (database *Database) GetEventSettings() (*EventSettings, error) {
@@ -69,10 +68,9 @@ func (database *Database) GetEventSettings() (*EventSettings, error) {
 		PauseDurationSec:            game.MatchTiming.PauseDurationSec,
 		TeleopDurationSec:           game.MatchTiming.TeleopDurationSec,
 		WarningRemainingDurationSec: game.MatchTiming.WarningRemainingDurationSec,
-		QuintetThreshold:            game.QuintetThreshold,
-		CargoBonusRankingPointThresholdWithoutQuintet: game.CargoBonusRankingPointThresholdWithoutQuintet,
-		CargoBonusRankingPointThresholdWithQuintet:    game.CargoBonusRankingPointThresholdWithQuintet,
-		HangarBonusRankingPointThreshold:              game.HangarBonusRankingPointThreshold,
+		BonusThreshold:              10,
+		Bonus:                       8,
+		EruptionInterval:            60,
 	}
 
 	if err := database.eventSettingsTable.create(&eventSettings); err != nil {

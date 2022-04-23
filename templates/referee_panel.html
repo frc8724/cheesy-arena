@@ -58,12 +58,10 @@
           </div>
           <div class="row">
             {{range $rule := .Rules}}
-              <a class="btn btn-sm {{if $rule.IsTechnical}}btn-danger{{else if $rule.IsRankingPoint}}btn-primary
-                  {{else}}btn-warning{{end}} btn-referee btn-rule"
+              <a class="btn btn-sm btn-warning btn-referee btn-rule"
                   data-rule-id="{{$rule.Id}}" onclick="setFoulRule(this);" data-toggle="tooltip"
                   title="{{$rule.Description}}">
-                {{$rule.RuleNumber}}{{if $rule.IsTechnical}}<sup>T</sup>
-                {{else if $rule.IsRankingPoint}}<sup>RP</sup>{{end}}
+                {{$rule.RuleNumber}}
               </a>
             {{end}}
           </div>
@@ -110,7 +108,7 @@
     <td>{{.foul.TeamId}}</td>
     <td>
       {{$rule := index .rules .foul.RuleId}}
-      {{$rule.RuleNumber}}{{if $rule.IsTechnical}}<sup>T</sup>{{else if $rule.IsRankingPoint}}<sup>RP</sup>{{end}}
+      {{$rule.RuleNumber}}
     </td>
     <td>
       <a class="btn btn-sm btn-danger" onclick="deleteFoul('{{.color}}', {{.foul.TeamId}}, '{{.foul.RuleId}}',

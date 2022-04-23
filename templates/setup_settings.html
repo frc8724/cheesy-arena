@@ -269,33 +269,24 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-5 control-label">Quintet Threshold</label>
+            <label class="col-lg-5 control-label">Lava Bonus Threshold</label>
             <div class="col-lg-7">
-              <input type="text" class="form-control" id="quintetThreshold" name="quintetThreshold"
-                value="{{.QuintetThreshold}}">
+              <input type="text" class="form-control" name="bonusThreshold"
+                value="{{.BonusThreshold}}">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-5 control-label">Cargo Bonus RP Threshold (Without Quintet)</label>
+            <label class="col-lg-5 control-label">Lava Bonus Points</label>
             <div class="col-lg-7">
-              <input type="text" class="form-control" id="cargoBonusRankingPointThresholdWithoutQuintet"
-                name="cargoBonusRankingPointThresholdWithoutQuintet"
-                value="{{.CargoBonusRankingPointThresholdWithoutQuintet}}">
+              <input type="text" class="form-control" name="bonus"
+                value="{{.Bonus}}">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-5 control-label">Cargo Bonus RP Threshold (With Quintet)</label>
+            <label class="col-lg-5 control-label">Volcano Eruption Interval (seconds)</label>
             <div class="col-lg-7">
-              <input type="text" class="form-control" id="cargoBonusRankingPointThresholdWithQuintet"
-                name="cargoBonusRankingPointThresholdWithQuintet"
-                value="{{.CargoBonusRankingPointThresholdWithQuintet}}">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-5 control-label">Hangar Bonus RP Threshold</label>
-            <div class="col-lg-7">
-              <input type="text" class="form-control" id="hangarBonusRankingPointThreshold"
-                name="hangarBonusRankingPointThreshold" value="{{.HangarBonusRankingPointThreshold}}">
+              <input type="text" class="form-control" name="eruptionInterval"
+                value="{{.EruptionInterval}}">
             </div>
           </div>
         </fieldset>

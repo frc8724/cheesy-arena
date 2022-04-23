@@ -11,19 +11,13 @@
   <div class="scoring-section">
     <div class="scoring-header">
       <div>&nbsp;</div>
-      <div>Taxi</div>
-      <div>Endgame Status</div>
+      <div>Climb</div>
     </div>
     {{range $i := seq 3}}
       <div>
         <div id="team{{$i}}" class="team robot-field"></div>
-        <div id="taxiStatus{{$i}}" class="boolean robot-field" onclick="handleClick('{{$i}}');">
+        <div id="climbStatus{{$i}}" class="boolean robot-field" onclick="handleClick('{{$i}}');">
           <div class="shortcut">{{$i}}</div>
-          <div class="value"></div>
-          <div class="shortcut"></div>
-        </div>
-        <div id="endgameStatus{{$i}}" class="endgame-status robot-field" onclick="handleClick('{{add $i 3}}');">
-          <div class="shortcut">{{add $i 3}}</div>
           <div class="value"></div>
           <div class="shortcut"></div>
         </div>
@@ -34,19 +28,8 @@
     <div id="elements">
       <div class="scoring-section">
         <div>
-          <div>&nbsp;</div>
-          <div class="goal-header">Upper</div>
-          <div class="goal-header">Lower</div>
-        </div>
-        <div>
-          <div class="goal-period">Auto</div>
+          <div class="goal-period">Lava Scored</div>
           {{template "goal" dict "period" "auto" "level" "Upper" "plus" "W" "minus" "Q"}}
-          {{template "goal" dict "period" "auto" "level" "Lower" "plus" "S" "minus" "A"}}
-        </div>
-        <div>
-          <div class="goal-period">Teleop</div>
-          {{template "goal" dict "period" "teleop" "level" "Upper" "plus" "R" "minus" "E"}}
-          {{template "goal" dict "period" "teleop" "level" "Lower" "plus" "F" "minus" "D"}}
         </div>
       </div>
     </div>

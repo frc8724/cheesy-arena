@@ -81,6 +81,9 @@ func (web *Web) ServeWebInterface(port int) {
 
 // Serves the root page of Cheesy Arena.
 func (web *Web) indexHandler(w http.ResponseWriter, r *http.Request) {
+	http.RedirectHandler("/match_play", http.StatusFound).ServeHTTP(w, r)
+	return
+
 	template, err := web.parseFiles("templates/index.html", "templates/base.html")
 	if err != nil {
 		handleWebErr(w, err)

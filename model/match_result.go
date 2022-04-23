@@ -74,17 +74,17 @@ func (matchResult *MatchResult) BlueScoreSummary() *game.ScoreSummary {
 
 // Checks the score for disqualifications or a tie and adjusts it appropriately.
 func (matchResult *MatchResult) CorrectEliminationScore() {
-	matchResult.RedScore.ElimDq = false
-	for _, card := range matchResult.RedCards {
-		if card == "red" {
-			matchResult.RedScore.ElimDq = true
-		}
-	}
-	for _, card := range matchResult.BlueCards {
-		if card == "red" {
-			matchResult.BlueScore.ElimDq = true
-		}
-	}
+	// matchResult.RedScore.ElimDq = false
+	// for _, card := range matchResult.RedCards {
+	// 	if card == "red" {
+	// 		matchResult.RedScore.ElimDq = true
+	// 	}
+	// }
+	// for _, card := range matchResult.BlueCards {
+	// 	if card == "red" {
+	// 		matchResult.BlueScore.ElimDq = true
+	// 	}
+	// }
 
 	// No elimination tiebreakers.
 }

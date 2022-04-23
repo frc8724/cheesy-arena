@@ -7,7 +7,7 @@ var websocket;
 var alliance;
 
 // Handles a websocket message to update the teams for the current match.
-var handleMatchLoad = function(data) {
+var handleMatchLoad = function (data) {
   $("#matchName").text(data.MatchType + " " + data.Match.DisplayName);
   if (alliance === "red") {
     $("#team1").text(data.Match.Red1);
@@ -21,7 +21,7 @@ var handleMatchLoad = function(data) {
 };
 
 // Handles a websocket message to update the match status.
-var handleMatchTime = function(data) {
+var handleMatchTime = function (data) {
   switch (matchStates[data.MatchState]) {
     case "PRE_MATCH":
       // Pre-match message state is set in handleRealtimeScore().
@@ -39,7 +39,7 @@ var handleMatchTime = function(data) {
 };
 
 // Handles a websocket message to update the realtime scoring fields.
-var handleRealtimeScore = function(data) {
+var handleRealtimeScore = function (data) {
   var realtimeScore;
   if (alliance === "red") {
     realtimeScore = data.Red;
@@ -50,36 +50,36 @@ var handleRealtimeScore = function(data) {
 
   for (var i = 0; i < 3; i++) {
     var i1 = i + 1;
-    $("#taxiStatus" + i1 + ">.value").text(score.TaxiStatuses[i] ? "Yes" : "No");
-    $("#taxiStatus" + i1).attr("data-value", score.TaxiStatuses[i]);
-    $("#endgameStatus" + i1 + ">.value").text(getEndgameStatusText(score.EndgameStatuses[i]));
-    $("#endgameStatus" + i1).attr("data-value", score.EndgameStatuses[i]);
-    $("#autoCargoLower").text(score.AutoCargoLower[0]);
-    $("#autoCargoUpper").text(score.AutoCargoUpper[0]);
-    $("#teleopCargoLower").text(score.TeleopCargoLower[0]);
-    $("#teleopCargoUpper").text(score.TeleopCargoUpper[0]);
+    $("#climbStatus" + i1 + ">.value").text(score.Climbs[i] ? "Yes" : "No");
+    $("#climbStatus" + i1).attr("data-value", score.Climbs[i]);
+    // $("#endgameStatus" + i1 + ">.value").text(getEndgameStatusText(score.EndgameStatuses[i]));
+    // $("#endgameStatus" + i1).attr("data-value", score.EndgameStatuses[i]);
+    // $("#autoCargoLower").text(score.AutoCargoLower[0]);
+    $("#autoCargoUpper").text(score.LavaCount);
+    // $("#teleopCargoLower").text(score.TeleopCargoLower[0]);
+    // $("#teleopCargoUpper").text(score.TeleopCargoUpper[0]);
   }
 };
 
 // Handles a keyboard event and sends the appropriate websocket message.
-var handleKeyPress = function(event) {
+var handleKeyPress = function (event) {
   websocket.send(String.fromCharCode(event.keyCode));
 };
 
 // Handles an element click and sends the appropriate websocket message.
-var handleClick = function(shortcut) {
+var handleClick = function (shortcut) {
   websocket.send(shortcut);
 };
 
 // Sends a websocket message to indicate that the score for this alliance is ready.
-var commitMatchScore = function() {
+var commitMatchScore = function () {
   websocket.send("commitMatch");
   $("#postMatchMessage").css("display", "flex");
   $("#commitMatchScore").hide();
 };
 
 // Returns the display text corresponding to the given integer endgame status value.
-var getEndgameStatusText = function(level) {
+var getEndgameStatusText = function (level) {
   switch (level) {
     case 1:
       return "Low";
@@ -94,16 +94,25 @@ var getEndgameStatusText = function(level) {
   }
 };
 
-$(function() {
+$(function () {
   alliance = window.location.href.split("/").slice(-1)[0];
   $("#alliance").attr("data-alliance", alliance);
 
   // Set up the websocket back to the server.
-  websocket = new CheesyWebsocket("/panels/scoring/" + alliance + "/websocket", {
-    matchLoad: function(event) { handleMatchLoad(event.data); },
-    matchTime: function(event) { handleMatchTime(event.data); },
-    realtimeScore: function(event) { handleRealtimeScore(event.data); },
-  });
+  websocket = new CheesyWebsocket(
+    "/panels/scoring/" + alliance + "/websocket",
+    {
+      matchLoad: function (event) {
+        handleMatchLoad(event.data);
+      },
+      matchTime: function (event) {
+        handleMatchTime(event.data);
+      },
+      realtimeScore: function (event) {
+        handleRealtimeScore(event.data);
+      },
+    }
+  );
 
   $(document).keypress(handleKeyPress);
 });

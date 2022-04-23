@@ -7,18 +7,19 @@ package web
 
 import (
 	"fmt"
-	"github.com/Team254/cheesy-arena/game"
-	"github.com/Team254/cheesy-arena/model"
-	"github.com/Team254/cheesy-arena/tournament"
-	"github.com/Team254/cheesy-arena/websocket"
-	"github.com/gorilla/mux"
-	"github.com/mitchellh/mapstructure"
 	"io"
 	"log"
 	"net/http"
 	"sort"
 	"strconv"
 	"time"
+
+	"github.com/Team254/cheesy-arena/game"
+	"github.com/Team254/cheesy-arena/model"
+	"github.com/Team254/cheesy-arena/tournament"
+	"github.com/Team254/cheesy-arena/websocket"
+	"github.com/gorilla/mux"
+	"github.com/mitchellh/mapstructure"
 )
 
 type MatchPlayListItem struct {
@@ -219,6 +220,10 @@ func (web *Web) matchPlayWebsocketHandler(w http.ResponseWriter, r *http.Request
 				continue
 			}
 			web.arena.AllianceStations[station].Bypass = !web.arena.AllianceStations[station].Bypass
+		case "bypassAll":
+			for _, a := range web.arena.AllianceStations {
+				a.Bypass = true
+			}
 		case "startMatch":
 			args := struct {
 				MuteMatchSounds bool
