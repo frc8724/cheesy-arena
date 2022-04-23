@@ -325,9 +325,9 @@ func (arena *Arena) AbortMatch() error {
 		return nil
 	}
 
-	// if arena.MatchState != WarmupPeriod {
-	// 	arena.playSound("abort")
-	// }
+	if arena.MatchState != WarmupPeriod {
+		arena.PlaySound("abort")
+	}
 	arena.MatchState = PostMatch
 	arena.matchAborted = true
 	arena.AudienceDisplayMode = "blank"
