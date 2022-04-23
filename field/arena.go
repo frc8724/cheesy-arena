@@ -79,6 +79,7 @@ type Arena struct {
 	MuteMatchSounds            bool
 	matchAborted               bool
 	soundsPlayed               map[*game.MatchSound]struct{}
+	timeoutWarningPlayed       bool
 
 	lastEruptionTime int
 }
@@ -366,6 +367,7 @@ func (arena *Arena) StartTimeout(durationSec int) error {
 	arena.LastMatchTimeSec = -1
 	arena.AllianceStationDisplayMode = "timeout"
 	arena.AllianceStationDisplayModeNotifier.Notify()
+	arena.timeoutWarningPlayed = false
 
 	return nil
 }
@@ -467,6 +469,11 @@ func (arena *Arena) Update() {
 			}()
 		}
 	case TimeoutActive:
+		if game.MatchTiming.TimeoutDurationSec > 60 && (game.MatchTiming.TimeoutDurationSec-int(matchTimeSec)) <= 60 && !arena.timeoutWarningPlayed {
+			arena.PlaySound("timeoutwarning")
+			arena.timeoutWarningPlayed = true
+		}
+
 		if matchTimeSec >= float64(game.MatchTiming.TimeoutDurationSec) {
 			arena.MatchState = PostTimeout
 			arena.PlaySound("end")
