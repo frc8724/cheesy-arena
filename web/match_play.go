@@ -290,6 +290,9 @@ func (web *Web) matchPlayWebsocketHandler(w http.ResponseWriter, r *http.Request
 				ws.WriteError(fmt.Sprintf("Failed to parse '%s' message.", messageType))
 				continue
 			}
+			if screen == "score" {
+				web.arena.PlaySound("result")
+			}
 			web.arena.AudienceDisplayMode = screen
 			web.arena.AudienceDisplayModeNotifier.Notify()
 			continue

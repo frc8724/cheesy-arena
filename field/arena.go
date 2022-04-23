@@ -469,7 +469,7 @@ func (arena *Arena) Update() {
 	case TimeoutActive:
 		if matchTimeSec >= float64(game.MatchTiming.TimeoutDurationSec) {
 			arena.MatchState = PostTimeout
-			arena.playSound("end")
+			arena.PlaySound("end")
 			go func() {
 				// Leave the timer on the screen briefly at the end of the timeout period.
 				time.Sleep(time.Second * matchEndScoreDwellSec)
@@ -850,14 +850,14 @@ func (arena *Arena) handleSounds(matchTimeSec float64) {
 		}
 		if _, ok := arena.soundsPlayed[sound]; !ok {
 			if matchTimeSec > sound.MatchTimeSec {
-				arena.playSound(sound.Name)
+				arena.PlaySound(sound.Name)
 				arena.soundsPlayed[sound] = struct{}{}
 			}
 		}
 	}
 }
 
-func (arena *Arena) playSound(name string) {
+func (arena *Arena) PlaySound(name string) {
 	if !arena.MuteMatchSounds {
 		arena.PlaySoundNotifier.NotifyWithMessage(name)
 	}
