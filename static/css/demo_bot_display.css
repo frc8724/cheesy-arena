@@ -19,6 +19,17 @@
   margin: 2.6vw 1.3vw 0 2.6vw;
 }
 
+.score.win::after {
+  content: "Win";
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 7vw;
+}
+
 .score.blue {
   background-color: #2080ff;
   margin: 2.6vw 2.6vw 0 1.3vw;
@@ -27,6 +38,7 @@
 .score {
   font-size: 15.6vw;
   border-radius: 1.6vw;
+  position: relative;
 }
 
 #clock {
