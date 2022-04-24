@@ -1,0 +1,35 @@
+.main {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  font-family: "FuturaLTBold";
+  color: white;
+  background-color: black;
+}
+
+.main > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.score.red {
+  background-color: #ff4444;
+  margin: 2.6vw 1.3vw 0 2.6vw;
+}
+
+.score.blue {
+  background-color: #2080ff;
+  margin: 2.6vw 2.6vw 0 1.3vw;
+}
+
+.score {
+  font-size: 15.6vw;
+  border-radius: 1.6vw;
+}
+
+#clock {
+  grid-area: 2 / 1 / 3 / 3;
+  font-size: 7.8vw;
+}

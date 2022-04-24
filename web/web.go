@@ -131,6 +131,8 @@ func (web *Web) newHandler() http.Handler {
 	router.HandleFunc("/displays/announcer/websocket", web.announcerDisplayWebsocketHandler).Methods("GET")
 	router.HandleFunc("/displays/audience", web.audienceDisplayHandler).Methods("GET")
 	router.HandleFunc("/displays/audience/websocket", web.audienceDisplayWebsocketHandler).Methods("GET")
+	router.HandleFunc("/displays/demo_bot", web.demoBotDisplayHandler).Methods("GET")
+	router.HandleFunc("/displays/demo_bot/websocket", web.demoBotDisplayWebsocketHandler).Methods("GET")
 	router.HandleFunc("/displays/field_monitor", web.fieldMonitorDisplayHandler).Methods("GET")
 	router.HandleFunc("/displays/field_monitor/websocket", web.fieldMonitorDisplayWebsocketHandler).Methods("GET")
 	router.HandleFunc("/displays/pit", web.pitDisplayHandler).Methods("GET")

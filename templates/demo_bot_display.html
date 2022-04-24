@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo Bot Display - Cheesy Arena</title>
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/lib/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/cheesy-arena.css" />
+    <link rel="stylesheet" href="/static/css/demo_bot_display.css" />
+  </head>
+  <body>
+    <div class="main">
+      <div class="score red"></div>
+      <div class="score blue"></div>
+      <div id="clock"></div>
+    </div>
+
+    {{range $sound := .MatchSounds}}
+      <audio id="sound-{{$sound.Name}}" src="/static/audio/{{$sound.Name}}.{{$sound.FileExtension}}" preload="auto">
+      </audio>
+    {{end}}
+    <script src="/static/js/lib/jquery.min.js"></script>
+    <script src="/static/js/lib/jquery.json-2.4.min.js"></script>
+    <script src="/static/js/lib/jquery.websocket-0.0.1.js"></script>
+    <script src="/static/js/lib/jquery.transit.min.js"></script>
+    <script src="/static/js/lib/handlebars-1.3.0.js"></script>
+    <script src="/static/js/lib/bootstrap.min.js"></script>
+    <script src="/static/js/cheesy-websocket.js"></script>
+    <script src="/static/js/match_timing.js"></script>
+    <script src="/static/js/demo_bot_display.js"></script>
+  </body>
+</html>
