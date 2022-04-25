@@ -19,8 +19,8 @@
   margin: 2.6vw 1.3vw 0 2.6vw;
 }
 
-.score.win::after {
-  content: "Win";
+.score.win::after,
+.score.tie::after {
   text-transform: uppercase;
   position: absolute;
   bottom: 0;
@@ -28,6 +28,14 @@
   right: 0;
   text-align: center;
   font-size: 7vw;
+}
+
+.score.win::after {
+  content: "Win";
+}
+
+.score.tie::after {
+  content: "Tie";
 }
 
 .score.blue {
