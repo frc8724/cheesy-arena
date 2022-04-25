@@ -81,7 +81,7 @@ type Arena struct {
 	soundsPlayed               map[*game.MatchSound]struct{}
 	timeoutWarningPlayed       bool
 
-	lastEruptionTime int
+	lastEruptionTime float64
 }
 
 type AllianceStation struct {
@@ -492,9 +492,10 @@ func (arena *Arena) Update() {
 		}
 	}
 
-	if (arena.MatchState == TeleopPeriod || arena.MatchState == AutoPeriod) && (int(matchTimeSec)-arena.lastEruptionTime) >= arena.EventSettings.EruptionInterval {
-		arena.lastEruptionTime = int(matchTimeSec)
-		fmt.Println("ERUPT")
+	// VOLCANIC ERUPTION
+	if (arena.MatchState == TeleopPeriod || arena.MatchState == AutoPeriod) && (matchTimeSec-arena.lastEruptionTime) >= float64(arena.EventSettings.EruptionInterval) {
+		arena.lastEruptionTime = arena.lastEruptionTime + float64(arena.EventSettings.EruptionInterval)
+		fmt.Printf("ERUPT at %v\n", arena.lastEruptionTime)
 	}
 
 	// Send a match tick notification if passing an integer second threshold or if the match state changed.
