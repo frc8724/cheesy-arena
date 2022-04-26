@@ -1,3 +1,27 @@
+let realtimeScores = { red: 0, blue: 0 };
+let postedScores = { red: 0, blue: 0 };
+
+let mode = "realtime";
+
+function updateScores() {
+  if (mode == "realtime") {
+    $(".score.red").text(realtimeScores.red).removeClass("win tie");
+    $(".score.blue").text(realtimeScores.blue).removeClass("win tie");
+  } else if (mode == "posted") {
+    $(".score.red").text(postedScores.red).removeClass("win tie");
+    $(".score.blue").text(postedScores.blue).removeClass("win tie");
+
+    if (postedScores.red > postedScores.blue) {
+      $(".score.red").addClass("win");
+    } else if (postedScores.blue > postedScores.red) {
+      $(".score.blue").addClass("win");
+    } else {
+      $(".score.red").addClass("tie");
+      $(".score.blue").addClass("tie");
+    }
+  }
+}
+
 function handleMatchTime(data) {
   translateMatchTime(data, function (matchState, matchStateText, countdownSec) {
     var countdownString = String(countdownSec % 60);
@@ -10,12 +34,12 @@ function handleMatchTime(data) {
 }
 
 function handleRealtimeScore(data) {
-  $(".score.red").text(
-    data.Red.ScoreSummary.Score - data.Red.ScoreSummary.EndgameScore
-  );
-  $(".score.blue").text(
-    data.Blue.ScoreSummary.Score - data.Blue.ScoreSummary.EndgameScore
-  );
+  realtimeScores.red =
+    data.Red.ScoreSummary.Score - data.Red.ScoreSummary.EndgameScore;
+  realtimeScores.blue =
+    data.Blue.ScoreSummary.Score - data.Blue.ScoreSummary.EndgameScore;
+
+  updateScores();
 }
 
 function handlePlaySound(sound) {
@@ -24,6 +48,13 @@ function handlePlaySound(sound) {
     v.currentTime = 0;
   });
   $("#sound-" + sound)[0].play();
+}
+
+function handleScorePosted(data) {
+  postedScores.red = data.RedScoreSummary.Score;
+  postedScores.blue = data.BlueScoreSummary.Score;
+
+  updateScores();
 }
 
 new CheesyWebsocket("/displays/demo_bot/websocket", {
@@ -38,5 +69,12 @@ new CheesyWebsocket("/displays/demo_bot/websocket", {
   },
   playSound(event) {
     handlePlaySound(event.data);
+  },
+  scorePosted(event) {
+    handleScorePosted(event.data);
+  },
+  audienceDisplayMode(event) {
+    mode = event.data == "score" ? "posted" : "realtime";
+    updateScores();
   },
 });
