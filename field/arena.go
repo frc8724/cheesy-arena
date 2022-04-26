@@ -495,7 +495,7 @@ func (arena *Arena) Update() {
 	// VOLCANIC ERUPTION
 	if (arena.MatchState == TeleopPeriod || arena.MatchState == AutoPeriod) && (matchTimeSec-arena.lastEruptionTime) >= float64(arena.EventSettings.EruptionInterval) {
 		arena.lastEruptionTime = arena.lastEruptionTime + float64(arena.EventSettings.EruptionInterval)
-		fmt.Printf("ERUPT at %v\n", arena.lastEruptionTime)
+		arena.VolcanoEruptionNotifier.Notify()
 	}
 
 	// Send a match tick notification if passing an integer second threshold or if the match state changed.
