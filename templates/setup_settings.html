@@ -242,7 +242,7 @@
           </div>
         </fieldset>
         <fieldset>
-          <legend>Game-Specific</legend>
+          <legend>Match Timing</legend>
           <div class="form-group">
             <label class="col-lg-5 control-label">Autonomous Period Duration (seconds)</label>
             <div class="col-lg-7">
@@ -268,6 +268,9 @@
                 value="{{.WarningRemainingDurationSec}}">
             </div>
           </div>
+        </fieldset>
+        <fieldset>
+          <legend>Game-Specific</legend>
           <div class="form-group">
             <label class="col-lg-5 control-label">Lava Bonus Threshold</label>
             <div class="col-lg-7">
@@ -283,11 +286,12 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-lg-5 control-label">Volcano Eruption Interval (seconds)</label>
+            <label class="col-lg-5 control-label">Erupt volcano after... (seconds)</label>
             <div class="col-lg-7">
               <input type="text" class="form-control" name="eruptionInterval"
-                value="{{.EruptionInterval}}">
+                value="{{.EruptionTimeSec}}">
             </div>
+            <p>Set to 0 to disable volcano</p>
           </div>
         </fieldset>
         <div class="form-group">

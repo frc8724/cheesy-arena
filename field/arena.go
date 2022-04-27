@@ -81,7 +81,7 @@ type Arena struct {
 	soundsPlayed               map[*game.MatchSound]struct{}
 	timeoutWarningPlayed       bool
 
-	lastEruptionTime float64
+	volcanoHasErupted bool
 }
 
 type AllianceStation struct {
@@ -413,7 +413,7 @@ func (arena *Arena) Update() {
 		arena.Plc.ResetMatch()
 		arena.Plc.SetHubMotors(true, rand.Intn(2) == 1)
 
-		arena.lastEruptionTime = 0
+		arena.volcanoHasErupted = false
 	case WarmupPeriod:
 		auto = true
 		enabled = false
@@ -493,9 +493,32 @@ func (arena *Arena) Update() {
 	}
 
 	// VOLCANIC ERUPTION
-	if (arena.MatchState == TeleopPeriod || arena.MatchState == AutoPeriod) && (matchTimeSec-arena.lastEruptionTime) >= float64(arena.EventSettings.EruptionInterval) {
-		arena.lastEruptionTime = arena.lastEruptionTime + float64(arena.EventSettings.EruptionInterval)
+	if arena.MatchInProgress() &&
+		arena.EventSettings.EruptionTimeSec != 0 &&
+		!arena.volcanoHasErupted &&
+		matchTimeSec >= float64(arena.EventSettings.EruptionTimeSec) {
+
+		arena.volcanoHasErupted = true
+		shouldNotify := false
+
+		// Red bonus
+		if arena.RedRealtimeScore.CurrentScore.LavaCount >= arena.EventSettings.BonusThreshold {
+			arena.RedRealtimeScore.CurrentScore.HasEruptionBonus = true
+			shouldNotify = true
+		}
+
+		// Blue bonus
+		if arena.BlueRealtimeScore.CurrentScore.LavaCount >= arena.EventSettings.BonusThreshold {
+			arena.BlueRealtimeScore.CurrentScore.HasEruptionBonus = true
+			shouldNotify = true
+		}
+
+		if shouldNotify {
+			arena.RealtimeScoreNotifier.Notify()
+		}
+
 		arena.VolcanoEruptionNotifier.Notify()
+		arena.PlaySound("volcano")
 	}
 
 	// Send a match tick notification if passing an integer second threshold or if the match state changed.
@@ -517,6 +540,10 @@ func (arena *Arena) Update() {
 
 	arena.LastMatchTimeSec = matchTimeSec
 	arena.lastMatchState = arena.MatchState
+}
+
+func (arena *Arena) MatchInProgress() bool {
+	return arena.MatchState == TeleopPeriod || arena.MatchState == AutoPeriod
 }
 
 // Loops indefinitely to track and update the arena components.

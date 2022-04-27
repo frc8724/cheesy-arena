@@ -40,7 +40,7 @@ type EventSettings struct {
 	WarningRemainingDurationSec int
 	BonusThreshold              int
 	Bonus                       int
-	EruptionInterval            int
+	EruptionTimeSec             int
 }
 
 func (database *Database) GetEventSettings() (*EventSettings, error) {
@@ -70,7 +70,7 @@ func (database *Database) GetEventSettings() (*EventSettings, error) {
 		WarningRemainingDurationSec: game.MatchTiming.WarningRemainingDurationSec,
 		BonusThreshold:              10,
 		Bonus:                       8,
-		EruptionInterval:            60,
+		EruptionTimeSec:             60,
 	}
 
 	if err := database.eventSettingsTable.create(&eventSettings); err != nil {

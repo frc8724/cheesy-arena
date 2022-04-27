@@ -6,20 +6,21 @@
 package game
 
 type Score struct {
-	LavaCount int
-	Climbs    [3]bool
-	Fouls     []Foul
+	LavaCount        int
+	HasEruptionBonus bool
+	Climbs           [3]bool
+	Fouls            []Foul
 }
 
 type ScoreSummary struct {
-	Score        int
-	EndgameScore int
-	LavaScore    int
-	LavaCount    int
-	MatchPoints  int
-	FoulPoints   int
-	HasBonus     bool
-	BonusPoints  int
+	Score            int
+	EndgameScore     int
+	LavaScore        int
+	LavaCount        int
+	MatchPoints      int
+	FoulPoints       int
+	HasEruptionBonus bool
+	BonusPoints      int
 }
 
 var BonusThreshold = 10
@@ -38,8 +39,8 @@ func (score *Score) Summarize(opponentFouls []Foul) *ScoreSummary {
 		summary.FoulPoints += foul.PointValue()
 	}
 
-	if summary.LavaCount >= BonusThreshold {
-		summary.HasBonus = true
+	if score.HasEruptionBonus {
+		summary.HasEruptionBonus = true
 		summary.BonusPoints = BonusPoints
 		summary.MatchPoints += BonusPoints
 	}

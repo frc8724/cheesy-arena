@@ -27,5 +27,6 @@ func UpdateMatchSounds() {
 		{"abort", "wav", -1},
 		{"result", "wav", -1},
 		{"timeoutwarning", "wav", -1},
+		{"volcano", "wav", -1},
 	}
 }

@@ -19,7 +19,7 @@ var MatchTiming = struct {
 	TeleopDurationSec           int
 	WarningRemainingDurationSec int
 	TimeoutDurationSec          int
-}{0, 0, 0, 120, 30, 0}
+}{0, 0, 0, 120, 0, 0}
 
 func GetDurationToAutoEnd() time.Duration {
 	return time.Duration(MatchTiming.WarmupDurationSec+MatchTiming.AutoDurationSec) * time.Second

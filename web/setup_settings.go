@@ -78,7 +78,7 @@ func (web *Web) settingsPostHandler(w http.ResponseWriter, r *http.Request) {
 	eventSettings.WarningRemainingDurationSec, _ = strconv.Atoi(r.PostFormValue("warningRemainingDurationSec"))
 	eventSettings.BonusThreshold, _ = strconv.Atoi(r.PostFormValue("bonusThreshold"))
 	eventSettings.Bonus, _ = strconv.Atoi(r.PostFormValue("bonus"))
-	eventSettings.EruptionInterval, _ = strconv.Atoi(r.PostFormValue("eruptionInterval"))
+	eventSettings.EruptionTimeSec, _ = strconv.Atoi(r.PostFormValue("eruptionInterval"))
 
 	if eventSettings.Ap2TeamChannel != 0 && eventSettings.Ap2TeamChannel == eventSettings.ApTeamChannel {
 		web.renderSettings(w, r, "Cannot use same channel for both access points.")
