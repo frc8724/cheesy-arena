@@ -46,7 +46,10 @@
 .modal-large {
   width: 60%;
 }
-.ds-status, .radio-status, .robot-status, .bypass-status {
+.ds-status,
+.radio-status,
+.robot-status,
+.bypass-status {
   background-color: #aaa;
   color: #000;
   border: 1px solid #999;
@@ -77,7 +80,7 @@
 .label-scoring {
   background-color: #e66;
 }
-.label-scoring[data-ready=true] {
+.label-scoring[data-ready="true"] {
   background-color: #0c6;
 }
 .nowrap {
@@ -91,7 +94,8 @@
 .btn-lower-third {
   width: 80px;
 }
-input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -105,6 +109,33 @@ td[data-plc-value="true"] {
   width: 110px;
   text-align: left;
 }
-input[data-changed="true"], select[data-changed="true"] {
+input[data-changed="true"],
+select[data-changed="true"] {
   border: 2px solid #f00;
+}
+
+.field-stopped {
+  position: relative;
+}
+
+.field-stopped .field-stopped-indicator {
+  visibility: visible;
+}
+
+.field-stopped-indicator {
+  visibility: hidden;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 0, 0, 0.5);
+  z-index: 5;
+  color: white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }

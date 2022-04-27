@@ -283,7 +283,8 @@
 <script src="/static/js/match_play.js"></script>
 {{end}}
 {{define "matchPlayTeam"}}
-<div class="row form-group" id="status{{.color}}{{.position}}">
+<div class="row form-group" id="status{{.color}}{{.position}}" style="margin-bottom: 10px; padding: 5px 0;">
+  <div class="field-stopped-indicator" id="field-stopped-indicator{{.color}}{{.position}}">Field disabled</div>
   <div class="col-lg-1">{{.position}} </div>
   <div class="col-lg-3">
     <input type="number" class="form-control input-sm" value="{{if ne 0 .team}}{{.team}}{{end}}"

@@ -88,6 +88,15 @@
             <a class="btn btn-sm btn-danger btn-referee btn-referee-wide"
                 onclick="location.reload();">Refresh</a>
           </div>
+          <div class="row">
+            <h4>Disable Robot</h4>
+            <button id="disable-R1" class="btn btn-sm btn-primary btn-referee">{{.Red1.Id}}</button>
+            <button id="disable-R2" class="btn btn-sm btn-primary btn-referee">{{.Red2.Id}}</button>
+            <button id="disable-R3" class="btn btn-sm btn-primary btn-referee">{{.Red3.Id}}</button>
+            <button id="disable-B1" class="btn btn-sm btn-info btn-referee">{{.Blue1.Id}}</button>
+            <button id="disable-B2" class="btn btn-sm btn-info btn-referee">{{.Blue2.Id}}</button>
+            <button id="disable-B3" class="btn btn-sm btn-info btn-referee">{{.Blue3.Id}}</button>
+          </div>
         </div>
     </div>
     {{else}}

@@ -7,15 +7,16 @@ package web
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"strconv"
+
 	"github.com/Team254/cheesy-arena/field"
 	"github.com/Team254/cheesy-arena/game"
 	"github.com/Team254/cheesy-arena/model"
 	"github.com/Team254/cheesy-arena/websocket"
 	"github.com/mitchellh/mapstructure"
-	"io"
-	"log"
-	"net/http"
-	"strconv"
 )
 
 // Renders the referee interface for assigning fouls.
@@ -97,7 +98,7 @@ func (web *Web) refereePanelWebsocketHandler(w http.ResponseWriter, r *http.Requ
 	defer ws.Close()
 
 	// Subscribe the websocket to the notifiers whose messages will be passed on to the client, in a separate goroutine.
-	go ws.HandleNotifiers(web.arena.MatchLoadNotifier, web.arena.ReloadDisplaysNotifier)
+	go ws.HandleNotifiers(web.arena.MatchLoadNotifier, web.arena.ReloadDisplaysNotifier, web.arena.ArenaStatusNotifier)
 
 	// Loop, waiting for commands and responding to them, until the client closes the connection.
 	for {
@@ -111,7 +112,24 @@ func (web *Web) refereePanelWebsocketHandler(w http.ResponseWriter, r *http.Requ
 			return
 		}
 
+		shouldReload := true
+
 		switch messageType {
+		case "disableRobot":
+			args := struct {
+				AllianceStation string
+			}{}
+			err = mapstructure.Decode(data, &args)
+			if err != nil {
+				ws.WriteError(err.Error())
+				continue
+			}
+
+			if web.arena.MatchInProgress() {
+				web.arena.AllianceStations[args.AllianceStation].FieldStopped = true
+			}
+
+			shouldReload = false
 		case "addFoul":
 			args := struct {
 				Alliance string
@@ -215,11 +233,13 @@ func (web *Web) refereePanelWebsocketHandler(w http.ResponseWriter, r *http.Requ
 			continue
 		}
 
-		// Force a reload of the client to render the updated foul list.
-		err = ws.WriteNotifier(web.arena.ReloadDisplaysNotifier)
-		if err != nil {
-			log.Println(err)
-			return
+		if shouldReload {
+			// Force a reload of the client to render the updated foul list.
+			err = ws.WriteNotifier(web.arena.ReloadDisplaysNotifier)
+			if err != nil {
+				log.Println(err)
+				return
+			}
 		}
 	}
 }

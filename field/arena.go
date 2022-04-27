@@ -85,12 +85,13 @@ type Arena struct {
 }
 
 type AllianceStation struct {
-	DsConn   *DriverStationConnection
-	Ethernet bool
-	Astop    bool
-	Estop    bool
-	Bypass   bool
-	Team     *model.Team
+	DsConn       *DriverStationConnection
+	Ethernet     bool
+	Astop        bool
+	Estop        bool
+	Bypass       bool
+	FieldStopped bool
+	Team         *model.Team
 }
 
 // Creates the arena and sets it to its initial state.
@@ -350,6 +351,14 @@ func (arena *Arena) ResetMatch() error {
 	arena.AllianceStations["B1"].Bypass = false
 	arena.AllianceStations["B2"].Bypass = false
 	arena.AllianceStations["B3"].Bypass = false
+
+	arena.AllianceStations["R1"].FieldStopped = false
+	arena.AllianceStations["R2"].FieldStopped = false
+	arena.AllianceStations["R3"].FieldStopped = false
+	arena.AllianceStations["B1"].FieldStopped = false
+	arena.AllianceStations["B2"].FieldStopped = false
+	arena.AllianceStations["B3"].FieldStopped = false
+
 	arena.MuteMatchSounds = false
 	return nil
 }
@@ -736,7 +745,7 @@ func (arena *Arena) sendDsPacket(auto bool, enabled bool) {
 		dsConn := allianceStation.DsConn
 		if dsConn != nil {
 			dsConn.Auto = auto
-			dsConn.Enabled = enabled && !allianceStation.Estop && !allianceStation.Astop && !allianceStation.Bypass
+			dsConn.Enabled = enabled && !allianceStation.Estop && !allianceStation.Astop && !allianceStation.Bypass && !allianceStation.FieldStopped
 			dsConn.Estop = allianceStation.Estop
 			err := dsConn.update(arena)
 			if err != nil {
