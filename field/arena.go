@@ -463,14 +463,14 @@ func (arena *Arena) Update() {
 			auto = false
 			enabled = false
 			sendDsPacket = true
-			go func() {
-				// Leave the scores on the screen briefly at the end of the match.
-				time.Sleep(time.Second * matchEndScoreDwellSec)
-				arena.AudienceDisplayMode = "blank"
-				arena.AudienceDisplayModeNotifier.Notify()
-				arena.AllianceStationDisplayMode = "logo"
-				arena.AllianceStationDisplayModeNotifier.Notify()
-			}()
+			// go func() {
+			// 	// Leave the scores on the screen briefly at the end of the match.
+			// 	time.Sleep(time.Second * matchEndScoreDwellSec)
+			// 	arena.AudienceDisplayMode = "blank"
+			// 	arena.AudienceDisplayModeNotifier.Notify()
+			// 	arena.AllianceStationDisplayMode = "logo"
+			// 	arena.AllianceStationDisplayModeNotifier.Notify()
+			// }()
 			go func() {
 				// Configure the network in advance for the next match after a delay.
 				time.Sleep(time.Second * preLoadNextMatchDelaySec)
@@ -508,25 +508,21 @@ func (arena *Arena) Update() {
 		matchTimeSec >= float64(arena.EventSettings.EruptionTimeSec) {
 
 		arena.volcanoHasErupted = true
-		shouldNotify := false
 
 		// Red bonus
 		if arena.RedRealtimeScore.CurrentScore.LavaCount >= arena.EventSettings.BonusThreshold {
 			arena.RedRealtimeScore.CurrentScore.HasEruptionBonus = true
-			shouldNotify = true
+			arena.RealtimeScoreNotifier.Notify()
 		}
 
 		// Blue bonus
 		if arena.BlueRealtimeScore.CurrentScore.LavaCount >= arena.EventSettings.BonusThreshold {
 			arena.BlueRealtimeScore.CurrentScore.HasEruptionBonus = true
-			shouldNotify = true
-		}
-
-		if shouldNotify {
 			arena.RealtimeScoreNotifier.Notify()
 		}
 
-		arena.VolcanoEruptionNotifier.Notify()
+		arena.VolcanoEruptionNotifier.NotifyWithMessage("red")
+		arena.VolcanoEruptionNotifier.NotifyWithMessage("blue")
 		arena.PlaySound("volcano")
 	}
 
