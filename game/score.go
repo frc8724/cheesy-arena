@@ -35,8 +35,8 @@ func (score *Score) Summarize(opponentFouls []Foul) *ScoreSummary {
 	summary.MatchPoints = summary.LavaCount
 
 	// Calculate penalty points.
-	for _, foul := range opponentFouls {
-		summary.FoulPoints += foul.PointValue()
+	for _, foul := range score.Fouls {
+		summary.FoulPoints -= foul.PointValue()
 	}
 
 	if score.HasEruptionBonus {
