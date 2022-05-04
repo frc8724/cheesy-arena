@@ -117,8 +117,19 @@ $(function () {
     matchLoad: function (event) {
       handleMatchLoad(event.data);
     },
-    arenaStatus: function (event) {
-      console.log("arena status");
+    arenaStatus: function ({ data }) {
+      ["R1", "R2", "R3", "B1", "B2", "B3"].forEach((allianceStation) => {
+        $(`#disable-${allianceStation}`).prop(
+          "disabled",
+          data.AllianceStations[allianceStation].FieldStopped ||
+            (!DEBUG && data.AllianceStations[allianceStation].Bypass)
+        );
+
+        $(`#set-foul-${allianceStation}`).prop(
+          "disabled",
+          !DEBUG && data.AllianceStations[allianceStation].Bypass
+        );
+      });
     },
   });
 

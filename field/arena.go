@@ -182,6 +182,9 @@ func (arena *Arena) LoadMatch(match *model.Match) error {
 		return fmt.Errorf("Cannot load match while there is a match still in progress or with results pending.")
 	}
 
+	arena.AllianceStations["B2"].Bypass = true
+	arena.AllianceStations["R2"].Bypass = true
+
 	arena.CurrentMatch = match
 	err := arena.assignTeam(match.Red1, "R1")
 	if err != nil {
@@ -232,7 +235,13 @@ func (arena *Arena) LoadMatch(match *model.Match) error {
 
 // Sets a new test match containing no teams as the current match.
 func (arena *Arena) LoadTestMatch() error {
-	return arena.LoadMatch(&model.Match{Type: "test"})
+	return arena.LoadMatch(&model.Match{
+		Type:  "test",
+		Blue1: 1,
+		Blue3: 2,
+		Red1:  3,
+		Red3:  4,
+	})
 }
 
 // Loads the first unplayed match of the current match type.
@@ -346,10 +355,10 @@ func (arena *Arena) ResetMatch() error {
 	arena.MatchState = PreMatch
 	arena.matchAborted = false
 	arena.AllianceStations["R1"].Bypass = false
-	arena.AllianceStations["R2"].Bypass = false
+	arena.AllianceStations["R2"].Bypass = true
 	arena.AllianceStations["R3"].Bypass = false
 	arena.AllianceStations["B1"].Bypass = false
-	arena.AllianceStations["B2"].Bypass = false
+	arena.AllianceStations["B2"].Bypass = true
 	arena.AllianceStations["B3"].Bypass = false
 
 	arena.AllianceStations["R1"].FieldStopped = false

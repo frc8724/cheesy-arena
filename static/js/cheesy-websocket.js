@@ -3,6 +3,8 @@
 //
 // Shared code for initiating websocket connections back to the server for full-duplex communication.
 
+const DEBUG = false
+
 var CheesyWebsocket = function(path, events) {
   var that = this;
   var protocol = "ws://";
