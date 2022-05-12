@@ -54,7 +54,7 @@ func (database *Database) GetEventSettings() (*EventSettings, error) {
 
 	// Database record doesn't exist yet; create it now.
 	eventSettings := EventSettings{
-		Name:                        "Untitled Event",
+		Name:                        "Demo Bot Event",
 		NumElimAlliances:            8,
 		SelectionRound2Order:        "L",
 		SelectionRound3Order:        "",
@@ -69,7 +69,7 @@ func (database *Database) GetEventSettings() (*EventSettings, error) {
 		TeleopDurationSec:           game.MatchTiming.TeleopDurationSec,
 		WarningRemainingDurationSec: game.MatchTiming.WarningRemainingDurationSec,
 		BonusThreshold:              10,
-		Bonus:                       8,
+		Bonus:                       5,
 		EruptionTimeSec:             60,
 	}
 
