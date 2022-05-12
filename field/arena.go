@@ -340,8 +340,6 @@ func (arena *Arena) AbortMatch() error {
 	}
 	arena.MatchState = PostMatch
 	arena.matchAborted = true
-	arena.AudienceDisplayMode = "blank"
-	arena.AudienceDisplayModeNotifier.Notify()
 	arena.AllianceStationDisplayMode = "logo"
 	arena.AllianceStationDisplayModeNotifier.Notify()
 	return nil

@@ -1,13 +1,19 @@
 let realtimeScores = { red: 0, blue: 0 };
 let postedScores = { red: 0, blue: 0 };
 
-let mode = "realtime";
+let mode = "match";
 
 function updateScores() {
-  if (mode == "realtime") {
+  if (mode == "blank") {
+    $(".main").hide();
+  } else {
+    $(".main").show();
+  }
+
+  if (mode == "match") {
     $(".score.red").text(realtimeScores.red).removeClass("win tie");
     $(".score.blue").text(realtimeScores.blue).removeClass("win tie");
-  } else if (mode == "posted") {
+  } else if (mode == "score") {
     $(".score.red").text(postedScores.red).removeClass("win tie");
     $(".score.blue").text(postedScores.blue).removeClass("win tie");
 
@@ -74,7 +80,7 @@ new CheesyWebsocket("/displays/demo_bot/websocket", {
     handleScorePosted(event.data);
   },
   audienceDisplayMode(event) {
-    mode = event.data == "score" ? "posted" : "realtime";
+    mode = event.data;
     updateScores();
   },
 });

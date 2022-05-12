@@ -1,3 +1,7 @@
+body {
+  background: black;
+}
+
 .main {
   display: grid;
   height: 100vh;
