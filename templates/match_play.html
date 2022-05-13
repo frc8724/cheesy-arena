@@ -90,7 +90,7 @@
         {{template "matchPlayTeam" dict "team" .Match.Red1 "color" "R" "position" 1 "data" .}}
       </div>
     </div>
-    <div class="row text-center">
+    <div class="row text-center" style="margin-bottom: 20px">
       <button type="button" id="startMatch" class="btn btn-success btn-lg btn-match-play"
           onclick="startMatch();" disabled>
         Start Match
@@ -113,7 +113,12 @@
         </button>
       </a>
     </div>
-    <br />
+    <div class="row text-center well">
+      <button class="btn btn-info" onclick="erupt('blue')">Erupt Blue Volcano</button>
+      <button class="btn btn-primary" onclick="erupt('red')">Erupt Red Volcano</button>
+      <br />
+      <button class="btn btn-success" onclick="erupt()" style="margin-top: 10px">Erupt Both</button>
+    </div>
     <div class="row">
       <div class="col-lg-12 well">
         <div class="col-lg-4">

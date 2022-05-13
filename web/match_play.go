@@ -224,6 +224,16 @@ func (web *Web) matchPlayWebsocketHandler(w http.ResponseWriter, r *http.Request
 			for _, a := range web.arena.AllianceStations {
 				a.Bypass = true
 			}
+		case "erupt":
+			alliance, ok := data.(string)
+			if !ok {
+				// Erupt both
+				web.arena.VolcanoEruptionNotifier.NotifyWithMessage("red")
+				web.arena.VolcanoEruptionNotifier.NotifyWithMessage("blue")
+				continue
+			}
+
+			web.arena.VolcanoEruptionNotifier.NotifyWithMessage(alliance)
 		case "startMatch":
 			args := struct {
 				MuteMatchSounds bool

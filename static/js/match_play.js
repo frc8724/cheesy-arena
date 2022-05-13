@@ -26,6 +26,10 @@ var bypassAll = function (station) {
   websocket.send("bypassAll", station);
 };
 
+var erupt = function (alliance) {
+  websocket.send("erupt", alliance);
+};
+
 // Sends a websocket message to start the match.
 var startMatch = function () {
   websocket.send("startMatch", {
