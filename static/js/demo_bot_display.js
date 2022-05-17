@@ -1,31 +1,83 @@
-let realtimeScores = { red: 0, blue: 0 };
-let postedScores = { red: 0, blue: 0 };
+const state = {
+  displayMode: "match",
+  redRealtimeScore: {
+    ScoreSummary: { Score: 0, EndgameScore: 0, HasEruptionBonus: false },
+  },
+  blueRealtimeScore: {
+    ScoreSummary: { Score: 0, EndgameScore: 0, HasEruptionBonus: false },
+  },
+  redPostedScore: {},
+  bluePostedScore: {},
+};
 
-let mode = "match";
+function update() {
+  if (state.displayMode == "score") {
+    $("#main").show();
+    $("#logo").hide();
 
-function updateScores() {
-  if (mode == "blank") {
-    $(".main").hide();
-  } else {
-    $(".main").show();
+    $("#realtime-score-red").text(state.redPostedScore.Score);
+    $("#realtime-score-blue").text(state.bluePostedScore.Score);
+
+    $(".score.red .volcano").toggleClass(
+      "active",
+      state.redPostedScore.HasEruptionBonus
+    );
+    $(".score.blue .volcano").toggleClass(
+      "active",
+      state.bluePostedScore.HasEruptionBonus
+    );
+  } else if (state.displayMode == "match") {
+    $("#main").show();
+    $("#logo").hide();
+
+    $("#realtime-score-red").text(
+      state.redRealtimeScore.ScoreSummary.Score -
+        state.redRealtimeScore.ScoreSummary.EndgameScore
+    );
+    $("#realtime-score-blue").text(
+      state.blueRealtimeScore.ScoreSummary.Score -
+        state.blueRealtimeScore.ScoreSummary.EndgameScore
+    );
+
+    $(".score.red .volcano").toggleClass(
+      "active",
+      state.redRealtimeScore.ScoreSummary.HasEruptionBonus
+    );
+    $(".score.blue .volcano").toggleClass(
+      "active",
+      state.blueRealtimeScore.ScoreSummary.HasEruptionBonus
+    );
+  } else if (state.displayMode == "blank") {
+    $("#main").hide();
+    $("#logo").hide();
+  } else if (state.displayMode == "logo") {
+    $("#main").hide();
+    $("#logo").show();
   }
 
-  if (mode == "match") {
-    $(".score.red").text(realtimeScores.red).removeClass("win tie");
-    $(".score.blue").text(realtimeScores.blue).removeClass("win tie");
-  } else if (mode == "score") {
-    $(".score.red").text(postedScores.red).removeClass("win tie");
-    $(".score.blue").text(postedScores.blue).removeClass("win tie");
+  $(".score.red")
+    .toggleClass(
+      "win",
+      state.displayMode == "score" &&
+        state.redPostedScore.Score > state.bluePostedScore.Score
+    )
+    .toggleClass(
+      "tie",
+      state.displayMode == "score" &&
+        state.redPostedScore.Score == state.bluePostedScore.Score
+    );
 
-    if (postedScores.red > postedScores.blue) {
-      $(".score.red").addClass("win");
-    } else if (postedScores.blue > postedScores.red) {
-      $(".score.blue").addClass("win");
-    } else {
-      $(".score.red").addClass("tie");
-      $(".score.blue").addClass("tie");
-    }
-  }
+  $(".score.blue")
+    .toggleClass(
+      "win",
+      state.displayMode == "score" &&
+        state.bluePostedScore.Score > state.redPostedScore.Score
+    )
+    .toggleClass(
+      "tie",
+      state.displayMode == "score" &&
+        state.bluePostedScore.Score == state.redPostedScore.Score
+    );
 }
 
 function handleMatchTime(data) {
@@ -36,31 +88,30 @@ function handleMatchTime(data) {
     }
     countdownString = Math.floor(countdownSec / 60) + ":" + countdownString;
     $("#clock").text(countdownString);
+
+    $(".clock-background")
+      .toggleClass(
+        "red",
+        countdownSec <= matchTiming.WarningRemainingDurationSec &&
+          matchState != "PRE_MATCH"
+      )
+      .toggleClass(
+        "blink",
+        countdownSec <= matchTiming.WarningRemainingDurationSec &&
+          matchState != "PRE_MATCH" &&
+          matchState != "POST_MATCH"
+      );
   });
-}
-
-function handleRealtimeScore(data) {
-  realtimeScores.red =
-    data.Red.ScoreSummary.Score - data.Red.ScoreSummary.EndgameScore;
-  realtimeScores.blue =
-    data.Blue.ScoreSummary.Score - data.Blue.ScoreSummary.EndgameScore;
-
-  updateScores();
 }
 
 function handlePlaySound(sound) {
-  $("audio").each((k, v) => {
-    v.pause();
-    v.currentTime = 0;
-  });
-  $("#sound-" + sound)[0].play();
-}
-
-function handleScorePosted(data) {
-  postedScores.red = data.RedScoreSummary.Score;
-  postedScores.blue = data.BlueScoreSummary.Score;
-
-  updateScores();
+  if (new URLSearchParams(location.search).get("mute") != "true") {
+    $("audio").each((k, v) => {
+      v.pause();
+      v.currentTime = 0;
+    });
+    $("#sound-" + sound)[0].play();
+  }
 }
 
 new CheesyWebsocket("/displays/demo_bot/websocket", {
@@ -68,7 +119,9 @@ new CheesyWebsocket("/displays/demo_bot/websocket", {
     handleMatchTime(event.data);
   },
   realtimeScore(event) {
-    handleRealtimeScore(event.data);
+    state.redRealtimeScore = event.data.Red;
+    state.blueRealtimeScore = event.data.Blue;
+    update();
   },
   matchTiming(event) {
     handleMatchTiming(event.data);
@@ -77,10 +130,12 @@ new CheesyWebsocket("/displays/demo_bot/websocket", {
     handlePlaySound(event.data);
   },
   scorePosted(event) {
-    handleScorePosted(event.data);
+    state.redPostedScore = event.data.RedScoreSummary;
+    state.bluePostedScore = event.data.BlueScoreSummary;
+    update();
   },
   audienceDisplayMode(event) {
-    mode = event.data;
-    updateScores();
+    state.displayMode = event.data;
+    update();
   },
 });
